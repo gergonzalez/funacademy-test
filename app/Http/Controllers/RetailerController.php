@@ -10,6 +10,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Transformers\UserTransformer;
 use App\Retailer;
 use App\User;
 
@@ -60,6 +61,7 @@ class RetailerController extends Controller
         $new_user = $new_retailer->user()->create([
             'email' => $request->email,
             'password' => app('hash')->make($request->password),
+            'active' => 0,
             'created_at' => $request->createdAt,
         ]);
 
@@ -67,7 +69,7 @@ class RetailerController extends Controller
             $new_retailer->providers()->attach($request->provider);
         }
 
-        return response()->json(['msg' => 'Retailer Registered', 'data' => $new_user]);
+        return response()->json(app('fractal')->item($new_user, new UserTransformer())->getArray());
     }
 
     /**
@@ -140,7 +142,7 @@ class RetailerController extends Controller
             $user->save();
             $retailer->save();
 
-            return response()->json(['data' => array_merge($user->toArray(), ['retailer' => $retailer])]);
+            return response()->json(app('fractal')->item($new_user, new UserTransformer())->getArray());
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             return response()->json(['error' => ['message' => "No user exists for id $user_id"]], 400);
         }
@@ -181,7 +183,7 @@ class RetailerController extends Controller
 
             $retailer->providers()->syncWithoutDetaching([$provider->id]);
 
-            return response()->json(['data' => array_merge($retailer_user->toArray(), ['providers' => $retailer->providers()->get()])]);
+            return response()->json(app('fractal')->item($new_user, new UserTransformer())->getArray());
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             return response()->json(['error' => ['message' => 'No users for those id']], 400);
         }
@@ -221,7 +223,7 @@ class RetailerController extends Controller
 
             $retailer->providers()->detach([$provider->id]);
 
-            return response()->json(['data' => array_merge($retailer_user->toArray(), ['providers' => $retailer->providers()->get()])]);
+            return response()->json(app('fractal')->item($new_user, new UserTransformer())->getArray());
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             return response()->json(['error' => ['message' => 'No users for those id']], 400);
         }

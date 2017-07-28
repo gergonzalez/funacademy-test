@@ -10,6 +10,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Transformers\UserTransformer;
 use App\User;
 
 class UserController extends Controller
@@ -30,11 +31,13 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
+        // return app('fractal')->collection(User::all(), new UserTransformer())->getArray();
+
         if (!$request->user()->isAdmin()) {
             return response()->json(['error' => 'You are not allowed to perform this action'], 401);
         }
 
-        return response()->json(['data' => User::all()]);
+        return response()->json(app('fractal')->collection(User::all(), new UserTransformer())->getArray());
     }
 
     /**
@@ -54,7 +57,7 @@ class UserController extends Controller
         try {
             $user = User::findOrFail($user_id);
 
-            return response()->json(['data' => $user->userable]);
+            return response()->json(app('fractal')->item($user, new UserTransformer())->getArray());
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             return response()->json(['error' => ['message' => $e->getMessage()]], 400);
         }
@@ -79,7 +82,7 @@ class UserController extends Controller
             $user->active = 1;
             $user->save();
 
-            return response()->json(['data' => $user]);
+            return response()->json(app('fractal')->item($user, new UserTransformer())->getArray());
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             return response()->json(['error' => ['message' => $e->getMessage()]], 400);
         }

@@ -10,6 +10,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Transformers\UserTransformer;
 use App\WebsiteUser;
 use App\User;
 
@@ -51,10 +52,11 @@ class WebsiteUserController extends Controller
         $new_user = $new_website_user->user()->create([
           'email' => $request->email,
           'password' => app('hash')->make($request->password),
+          'active' => 0,
           'created_at' => $request->createdAt,
         ]);
 
-        return response()->json(['data' => array_merge($new_user->toArray(), ['website_user' => $new_website_user])]);
+        return response()->json(app('fractal')->item($new_user, new UserTransformer())->getArray());
     }
 
     /**
@@ -115,7 +117,7 @@ class WebsiteUserController extends Controller
             $user->save();
             $website_user->save();
 
-            return response()->json(['data' => array_merge($user->toArray(), ['website_user' => $website_user])]);
+            return response()->json(app('fractal')->item($new_user, new UserTransformer())->getArray());
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             return response()->json(['error' => ['message' => "No user exists for id $user_id"]], 400);
         }

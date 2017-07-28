@@ -10,6 +10,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Transformers\UserTransformer;
 use App\Provider;
 use App\User;
 
@@ -56,15 +57,14 @@ class ProviderController extends Controller
             $new_user = $new_provider->user()->create([
               'email' => $request->email,
               'password' => app('hash')->make($request->password),
+              'active' => 0,
               'created_at' => $request->createdAt,
             ]);
         } else {
             return response()->json(['error' => ['message' => 'Provider not saved']], 422);
         }
 
-        return response()->json(['data' => array_merge($new_user->toArray(), ['provider' => $new_provider])]);
-
-        return response()->json(['data' => $new_user->userable]);
+        return response()->json(app('fractal')->item($new_user, new UserTransformer())->getArray());
     }
 
     /**
@@ -133,7 +133,7 @@ class ProviderController extends Controller
             $user->save();
             $provider->save();
 
-            return response()->json(['data' => array_merge($user->toArray(), ['provider' => $provider])]);
+            return response()->json(app('fractal')->item($new_user, new UserTransformer())->getArray());
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             return response()->json(['error' => ['message' => "No user exists for id $user_id"]], 400);
         }
@@ -172,7 +172,7 @@ class ProviderController extends Controller
 
             $provider->retailers()->updateExistingPivot($retailer->id, ['accepted' => true]);
 
-            return response()->json(['data' => array_merge($provider_user->toArray(), ['retailers' => $retailer->providers()->get()])]);
+            return response()->json(app('fractal')->item($new_user, new UserTransformer())->getArray());
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             return response()->json(['error' => ['message' => 'No users for those id']], 400);
         }
@@ -212,7 +212,7 @@ class ProviderController extends Controller
             $provider->discount = $request->discount;
             $provider->save();
 
-            return response()->json(['data' => $provider]);
+            return response()->json(app('fractal')->item($new_user, new UserTransformer())->getArray());
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             return response()->json(['error' => ['message' => "No user exists for id $user_id"]], 400);
         }
