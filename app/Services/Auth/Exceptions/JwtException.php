@@ -15,7 +15,7 @@ use Exception;
 class JwtException extends Exception
 {
     /**
-     * Create the new JwtGuard guard.
+     * Create a new JwtException.
      *
      * @param string $message
      * @param int    $code

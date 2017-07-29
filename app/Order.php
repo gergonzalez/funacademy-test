@@ -38,4 +38,15 @@ class Order extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    /**
+     * Get the product associated with the Order.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\belongsTo
+     */
+    public function product()
+    {
+        return $this->belongsTo(Product::class);
+    }
+
 }

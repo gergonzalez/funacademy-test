@@ -18,7 +18,7 @@ class UserTransformer extends TransformerAbstract
     ];
 
     protected $defaultIncludes = [
-      'data',
+      'info',
     ];
 
     /**
@@ -31,12 +31,9 @@ class UserTransformer extends TransformerAbstract
         return [
             'id' => $user->id,
             'email' => $user->email,
+            'type' => $user->getType(),
             'activated' => $user->active,
-            'createdAt' => $user->created_at->toFormattedDateString(),
-            'type' => $user->isAdmin() ? 'Admin' :
-                      ($user->isWebsiteUser() ? 'Website User' :
-                      ($user->isRetailer() ? 'Retailer' :
-                      ($user->isProvider() ? 'Provider' : ''))),
+            'createdAt' => $user->created_at->toDayDateTimeString(),
         ];
     }
 
@@ -45,7 +42,7 @@ class UserTransformer extends TransformerAbstract
      *
      * @return League\Fractal\ItemResource
      */
-    public function includeData(User $user)
+    public function includeInfo(User $user)
     {
         if ($user->isAdmin()) {
             return $this->item($user->userable, new AdminTransformer());

@@ -63,13 +63,13 @@ class Handler extends ExceptionHandler
             $code = $e->getCode();
 
             if ($code === 1) {
-                return response()->json(['error' => ['message' => 'No Token Provided']], 401);
+                return response()->json(['error' => ['message' => 'Unauthorized. No Token Provided']], 401);
             } elseif ($code === 2) {
-                return response()->json(['error' => ['message' => 'User Not found']], 401);
+                return response()->json(['error' => ['message' => 'Unauthorized. User Not found']], 401);
             } elseif ($code === 3) {
-                return response()->json(['error' => ['message' => 'Token Expired']], 401);
+                return response()->json(['error' => ['message' => 'Unauthorized. Token Expired']], 401);
             } else {
-                return response()->json(['error' => ['message' => 'Token Error']], 401);
+                return response()->json(['error' => ['message' => 'Unauthorized. Token Error']], 401);
             }
         }
 

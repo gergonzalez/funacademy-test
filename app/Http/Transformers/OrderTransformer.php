@@ -1,6 +1,6 @@
 <?php
 /**
- * Manage requests to 'admins*'.
+ * Transform Order Data.
  *
  * @author     German Gonzalez Rodriguez <ger@gergonzalez.com>
  * @copyright  German Gonzalez Rodriguez
@@ -28,6 +28,7 @@ class OrderTransformer extends TransformerAbstract
      * @var array
      */
     protected $defaultIncludes = [
+        'user','product'
     ];
 
     /**
@@ -38,8 +39,32 @@ class OrderTransformer extends TransformerAbstract
     public function transform(Order $order)
     {
         return [
-            'id' => $user->id,
-            'email' => $user->email,
+            'id' => $order->id,
+            'quantity' => $order->quantity,
+            'amount' => round($order->amount,2),
+            'status' => $order->status,
+            'createdAt' => $order->created_at->toDayDateTimeString(),
         ];
     }
+
+    /**
+     * Include User.
+     *
+     * @return League\Fractal\ItemResource
+     */
+    public function includeUser(Order $order)
+    {
+        return $this->item($order->user, new UserTransformer());
+    }
+
+    /**
+     * Include Product.
+     *
+     * @return League\Fractal\ItemResource
+     */
+    public function includeProduct(Order $order)
+    {
+        return $this->item($order->product, new ProductTransformer());
+    }
+
 }

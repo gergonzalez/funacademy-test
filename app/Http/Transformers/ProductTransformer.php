@@ -1,6 +1,6 @@
 <?php
 /**
- * Transform Provider Data.
+ * Transform Product Data.
  *
  * @author     German Gonzalez Rodriguez <ger@gergonzalez.com>
  * @copyright  German Gonzalez Rodriguez
@@ -10,9 +10,9 @@
 namespace App\Http\Transformers;
 
 use League\Fractal\TransformerAbstract;
-use App\Provider;
+use App\Product;
 
-class ProviderTransformer extends TransformerAbstract
+class ProductTransformer extends TransformerAbstract
 {
     /**
      * List of resources possible to include.
@@ -31,20 +31,16 @@ class ProviderTransformer extends TransformerAbstract
     ];
 
     /**
-     * Turn Provider object into a generic array.
+     * Turn Product object into a generic array.
      *
      * @return array
      */
-    public function transform(Provider $provider)
+    public function transform(Product $product)
     {
-        $data = [
-            'companyname' => $provider->company_name,
-            'phone' => $provider->phone,
-            'IBAN' => $provider->iban,
-            'companyDescription' => $provider->company_description,
-            'discount' => $provider->discount,
+        return [
+            'id' => $product->id,
+            'name' => $product->name,
+            'price' => $product->price,
         ];
-
-        return $data;
     }
 }

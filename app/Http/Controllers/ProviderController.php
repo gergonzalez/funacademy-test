@@ -46,15 +46,15 @@ class ProviderController extends Controller
             return response()->json(['error' => ['message' => $e->getMessage(), 'data' => $e->getResponse()->original]], 422);
         }
 
-        $new_provider = Provider::create([
+        $newProvider = Provider::create([
           'company_name' => $request->companyname,
           'phone' => $request->phone,
           'company_description' => $request->input('companyDescription', ''),
           'iban' => $request->IBAN,
         ]);
 
-        if (isset($new_provider) && $new_provider->id) {
-            $new_user = $new_provider->user()->create([
+        if (isset($newProvider) && $newProvider->id) {
+            $newUser = $newProvider->user()->create([
               'email' => $request->email,
               'password' => app('hash')->make($request->password),
               'active' => 0,
@@ -64,18 +64,18 @@ class ProviderController extends Controller
             return response()->json(['error' => ['message' => 'Provider not saved']], 422);
         }
 
-        return response()->json(app('fractal')->item($new_user, new UserTransformer())->getArray());
+        return response()->json(app('fractal')->item($newUser, new UserTransformer())->getArray());
     }
 
     /**
      * Update the specified Provider in db.
      *
      * @param \Illuminate\Http\Request $request
-     * @param int                      $user_id
+     * @param int                      $userId
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(Request $request, $user_id)
+    public function update(Request $request, $userId)
     {
         if (!$request->user()->isAdmin()) {
             return response()->json(['error' => 'You are not allowed to perform this action'], 401);
@@ -83,7 +83,7 @@ class ProviderController extends Controller
 
         try {
             $this->validate($request, [
-                'email' => "email|unique:users,email,$user_id|max:255",
+                'email' => "email|unique:users,email,$userId|max:255",
                 'password' => 'min:5',
                 'active' => 'boolean',
                 'companyname' => 'max:255',
@@ -97,7 +97,7 @@ class ProviderController extends Controller
         }
 
         try {
-            $user = User::findOrFail($user_id);
+            $user = User::findOrFail($userId);
 
             if (!$user->isProvider()) {
                 return response()->json(['error' => ['message' => 'Customer must be a provider']], 400);
@@ -109,7 +109,7 @@ class ProviderController extends Controller
                 $user->email = $request->email;
             }
             if ($request->has('password')) {
-                $user->password = $request->password;
+                $user->password = app('hash')->make($request->password);
             }
             if ($request->has('active')) {
                 $user->active = $request->active;
@@ -133,9 +133,9 @@ class ProviderController extends Controller
             $user->save();
             $provider->save();
 
-            return response()->json(app('fractal')->item($new_user, new UserTransformer())->getArray());
+            return response()->json(app('fractal')->item($user, new UserTransformer())->getArray());
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-            return response()->json(['error' => ['message' => "No user exists for id $user_id"]], 400);
+            return response()->json(['error' => ['message' => "No user with id $userId"]], 400);
         }
     }
 
@@ -143,38 +143,44 @@ class ProviderController extends Controller
      * Update the accepted pivot value in the intermediate table.
      *
      * @param \Illuminate\Http\Request $request
+     * @param int                      $providerUserId
+     * @param int                      $retailerUserId
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function acceptRetailer(Request $request, $provider_user_id, $retailer_user_id)
+    public function acceptRetailer(Request $request, $providerUserId, $retailerUserId)
     {
-        $auth_user = $request->user();
+        $authUser = $request->user();
 
-        if (!$auth_user->isAdmin()
-            && (!$auth_user->isProvider() || ($auth_user->isProvider() && $auth_user->id != $provider_user_id))) {
+        if (!$authUser->isAdmin()
+            && (!$authUser->isProvider() || ($authUser->isProvider() && $authUser->id != $providerUserId))) {
             return response()->json(['error' => 'You are not allowed to perform this action'], 401);
         }
 
         try {
-            $retailer_user = User::findOrFail($retailer_user_id);
-            $provider_user = User::findOrFail($provider_user_id);
+            $retailerUser = User::findOrFail($retailerUserId);
+            $providerUser = User::findOrFail($providerUserId);
 
-            if (!$retailer_user->isRetailer()) {
+            if (!$retailerUser->isRetailer()) {
                 return response()->json(['error' => ['message' => 'Incorrect Retailer value']], 400);
             }
 
-            if (!$provider_user->isProvider()) {
+            if (!$providerUser->isProvider()) {
                 return response()->json(['error' => ['message' => 'Incorrect Provider value']], 400);
             }
 
-            $retailer = $retailer_user->userable;
-            $provider = $provider_user->userable;
+            $retailer = $retailerUser->userable;
+            $provider = $providerUser->userable;
 
+            if( !$provider->retailers()->where('retailer_id',$retailer->id)->count() ){
+                return response()->json(['error' => ['message' => 'No relation between the provider and the retailer']], 400);
+            }
+            
             $provider->retailers()->updateExistingPivot($retailer->id, ['accepted' => true]);
 
-            return response()->json(app('fractal')->item($new_user, new UserTransformer())->getArray());
+            return response()->json(app('fractal')->item($retailer->user, new UserTransformer())->getArray());
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-            return response()->json(['error' => ['message' => 'No users for those id']], 400);
+            return response()->json(['error' => ['message' => "No users with id $userId"]], 400);
         }
     }
 
@@ -182,12 +188,11 @@ class ProviderController extends Controller
      * Update the discount value in db.
      *
      * @param \Illuminate\Http\Request $request
-     * @param int                      $retailer_user_id
-     * @param int                      $provider_user_id
+     * @param int                      $userId
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function setDiscount(Request $request, $user_id)
+    public function setDiscount(Request $request, $userId)
     {
         if (!$request->user()->isAdmin()) {
             return response()->json(['error' => 'You are not allowed to perform this action'], 401);
@@ -202,7 +207,7 @@ class ProviderController extends Controller
         }
 
         try {
-            $user = User::findOrFail($user_id);
+            $user = User::findOrFail($userId);
 
             if (!$user->isProvider()) {
                 return response()->json(['error' => ['message' => 'The Customer must be a provider']], 400);
@@ -212,9 +217,9 @@ class ProviderController extends Controller
             $provider->discount = $request->discount;
             $provider->save();
 
-            return response()->json(app('fractal')->item($new_user, new UserTransformer())->getArray());
+            return response()->json(app('fractal')->item($user, new UserTransformer())->getArray());
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-            return response()->json(['error' => ['message' => "No user exists for id $user_id"]], 400);
+            return response()->json(['error' => ['message' => "No user with id $userId"]], 400);
         }
     }
 }

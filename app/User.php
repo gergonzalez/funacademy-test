@@ -119,4 +119,19 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     {
         return $this->userable_type === 'App\Retailer';
     }
+
+    /**
+     * Readable user type
+     *
+     * @return string
+     */
+    public function getType()
+    {
+        return $this->isAdmin() ? 'Admin' :
+              ($this->isWebsiteUser() ? 'Website User' :
+              ($this->isRetailer() ? 'Retailer' :
+              ($this->isProvider() ? 'Provider' : '')));
+    }
+
+
 }

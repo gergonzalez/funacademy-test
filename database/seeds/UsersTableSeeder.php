@@ -17,7 +17,7 @@ class UsersTableSeeder extends Seeder
     public function run()
     {
         //Populate admin table
-        $admin_id = DB::table('admin')->insertGetId([
+        $admin_id = DB::table('admins')->insertGetId([
             'name' => 'Admin',
         ]);
 

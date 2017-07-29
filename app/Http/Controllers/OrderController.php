@@ -10,6 +10,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Transformers\OrderTransformer;
 use App\User;
 use App\Product;
 use App\Order;
@@ -51,41 +52,41 @@ class OrderController extends Controller
         $quantity = $request->quantity;
         $amount = 0;
 
-        $today_quantity = $user->todayOrdersQuantity();
+        $todayQuantity = $user->todayOrdersQuantity();
 
         if ($user->isAdmin()) {
             return response()->json(['error' => 'Admins can\'t buy'], 401);
         } elseif ($user->isWebsiteUser()) {
-            if ($today_quantity + $quantity > 10) {
-                return response()->json(['error' => 'As a website user you can\'t order more than 10 units. Today you already ordered $today_quantity. Order not processed'], 401);
+            if ($todayQuantity + $quantity > 10) {
+                return response()->json(['error' => "As a website user you can't order more than 10 units. Today you already ordered $todayQuantity. Order not processed"], 401);
             }
             $amount = $quantity * $product->price;
         } elseif ($user->isProvider()) {
-            if ($today_quantity + $quantity > 50) {
-                return response()->json(['error' => 'As a provider you can\'t order more than 50 units. Today you already ordered $today_quantity. Order not processed'], 401);
+            if ($todayQuantity + $quantity > 50) {
+                return response()->json(['error' => "As a provider you can't order more than 50 units. Today you already ordered $todayQuantity. Order not processed"], 401);
             }
             $provider = $user->userable;
             $amount = ($quantity * $product->price) * (1 - ($provider->discount / 100));
         } elseif ($user->isRetailer()) {
             $retailer = $user->userable;
-            $n_providers = $retailer->providers()->count();
-            $max_units = 5 * $n_providers;
+            $nProviders = $retailer->providers()->count();
+            $maxUnits = 5 * $nProviders;
 
-            if ($n_providers) {
-                if ($today_quantity + $quantity > $max_units) {
-                    return response()->json(['error' => "As a retailer with providers you can\'t order more than $max_units units. Today you already ordered $today_quantity. Order not processed"], 401);
+            if ($nProviders) {
+                if ($todayQuantity + $quantity > $maxUnits) {
+                    return response()->json(['error' => "As a retailer with providers you can't order more than $maxUnits units. Today you already ordered $todayQuantity. Order not processed"], 401);
                 }
 
-                $amount = $retailer->orderTotalAmount($product->price, $quantity, $today_quantity);
+                $amount = $retailer->orderTotalAmount($product->price, $quantity, $todayQuantity);
             } else {
-                if ($today_quantity + $quantity > 30) {
-                    return response()->json(['error' => 'As a retailer without providers you can\'t order more than 30 units. Today you already ordered $today_quantity. Order not processed'], 401);
+                if ($todayQuantity + $quantity > 30) {
+                    return response()->json(['error' => "As a retailer without providers you can't order more than 30 units. Today you already ordered $todayQuantity. Order not processed"], 401);
                 }
                 $amount = $quantity * $product->price;
             }
         }
 
-        $new_order = Order::create([
+        $newOrder = Order::create([
           'user_id' => $user->id,
           'product_id' => $product->id,
           'quantity' => $request->quantity,
@@ -93,18 +94,18 @@ class OrderController extends Controller
           'status' => 'pending',
         ]);
 
-        return response()->json(['data' => $new_order]);
+        return response()->json(app('fractal')->item($newOrder, new OrderTransformer())->getArray());
     }
 
     /**
      * Update the status value in db.
      *
      * @param \Illuminate\Http\Request $request
-     * @param int                      $order_id
+     * @param int                      $orderId
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(Request $request, $order_id)
+    public function update(Request $request, $orderId)
     {
         if (!$request->user()->isAdmin()) {
             return response()->json(['error' => 'You are not allowed to perform this action'], 401);
@@ -120,7 +121,7 @@ class OrderController extends Controller
         }
 
         try {
-            $order = Order::findOrFail($order_id);
+            $order = Order::findOrFail($orderId);
             $order->status = $request->status;
             $order->observations = $request->input('observations', '');
             $order->save();
@@ -135,9 +136,9 @@ class OrderController extends Controller
                 });
             }
 
-            return response()->json(['data' => $order]);
+            return response()->json(app('fractal')->item($order, new OrderTransformer())->getArray());
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-            return response()->json(['error' => ['message' => "No user exists for id $user_id"]], 400);
+            return response()->json(['error' => ['message' => "No order with id $orderId"]], 400);
         }
     }
 
@@ -145,23 +146,23 @@ class OrderController extends Controller
      * Delete the specified order.
      *
      * @param \Illuminate\Http\Request $request
-     * @param int                      $order_id
+     * @param int                      $orderId
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function destroy(Request $request, $order_id)
+    public function destroy(Request $request, $orderId)
     {
         if (!$request->user()->isAdmin()) {
             return response()->json(['error' => 'You are not allowed to perform this action'], 401);
         }
 
         try {
-            $order = Order::findOrFail($order_id);
+            $order = Order::findOrFail($orderId);
             if ($order->delete()) {
                 return response()->json(['data' => ['Order successfully deleted']]);
             }
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-            return response()->json(['error' => ['message' => "No user exists for id $user_id"]], 400);
+            return response()->json(['error' => ['message' => "No order with id $orderId"]], 400);
         }
     }
 }

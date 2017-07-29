@@ -39,7 +39,7 @@ class RetailerController extends Controller
                 'name' => 'required|max:255',
                 'retailerResponsibleName' => 'required|max:255',
                 'phone' => 'digits_between:9,11',
-                'provider' => 'numeric|exists:providers,id',
+                'provider' => 'numeric|exists:users,id',
                 'mobilePhone' => 'required|digits_between:9,11',
                 'address' => 'required',
                 'IBAN' => 'required|alpha_num|max:34',
@@ -49,7 +49,16 @@ class RetailerController extends Controller
             return response()->json(['error' => ['message' => $e->getMessage(), 'data' => $e->getResponse()->original]], 422);
         }
 
-        $new_retailer = Retailer::create([
+        if ($request->has('provider')) {
+            $user = User::find($request->provider);
+
+            if( !$user->isProvider() ){
+                return response()->json(['error' => ['message' => 'The given data failed to pass validation.', 
+                    'data' => [ 'email' => 'The user is not a provider' ]]], 422);
+            }
+        }
+
+        $newRetailer = Retailer::create([
             'name' => $request->name,
             'responsible_name' => $request->retailerResponsibleName,
             'phone' => $request->input('phone', ''),
@@ -58,29 +67,29 @@ class RetailerController extends Controller
             'iban' => $request->IBAN,
         ]);
 
-        $new_user = $new_retailer->user()->create([
+        $newUser = $newRetailer->user()->create([
             'email' => $request->email,
             'password' => app('hash')->make($request->password),
             'active' => 0,
             'created_at' => $request->createdAt,
         ]);
 
-        if ($request->has('provider')) {
-            $new_retailer->providers()->attach($request->provider);
+        if ( isset($user) ) {
+            $newRetailer->providers()->attach($user->userable_id);
         }
 
-        return response()->json(app('fractal')->item($new_user, new UserTransformer())->getArray());
+        return response()->json(app('fractal')->item($newUser, new UserTransformer())->getArray());
     }
 
     /**
      * Update the specified Website User in db.
      *
      * @param \Illuminate\Http\Request $request
-     * @param int                      $user_id
+     * @param int                      $userId
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(Request $request, $user_id)
+    public function update(Request $request, $userId)
     {
         if (!$request->user()->isAdmin()) {
             return response()->json(['error' => 'You are not allowed to perform this action'], 401);
@@ -88,7 +97,7 @@ class RetailerController extends Controller
 
         try {
             $this->validate($request, [
-                'email' => "email|unique:users,email,$user_id|max:255",
+                'email' => "email|unique:users,email,$userId|max:255",
                 'password' => 'min:5',
                 'active' => 'boolean',
                 'name' => 'max:255',
@@ -103,7 +112,7 @@ class RetailerController extends Controller
         }
 
         try {
-            $user = User::findOrFail($user_id);
+            $user = User::findOrFail($userId);
 
             if (!$user->isRetailer()) {
                 return response()->json(['error' => ['message' => 'Must be a Retailer']], 400);
@@ -115,7 +124,7 @@ class RetailerController extends Controller
                 $user->email = $request->email;
             }
             if ($request->has('password')) {
-                $user->password = $request->password;
+                $user->password = app('hash')->make($request->password);
             }
             if ($request->has('active')) {
                 $user->active = $request->active;
@@ -124,27 +133,27 @@ class RetailerController extends Controller
                 $user->created_at = $request->createdAt;
             }
             if ($request->has('name')) {
-                $provider->name = $request->name;
+                $retailer->name = $request->name;
             }
             if ($request->has('retailerResponsibleName')) {
-                $provider->responsible_name = $request->retailerResponsibleName;
+                $retailer->responsible_name = $request->retailerResponsibleName;
             }
             if ($request->has('phone')) {
-                $provider->phone = $request->phone;
+                $retailer->phone = $request->phone;
             }
             if ($request->has('mobilePhone')) {
-                $provider->mobile = $request->mobilePhone;
+                $retailer->mobile = $request->mobilePhone;
             }
             if ($request->has('IBAN')) {
-                $provider->iban = $request->IBAN;
+                $retailer->iban = $request->IBAN;
             }
 
             $user->save();
             $retailer->save();
 
-            return response()->json(app('fractal')->item($new_user, new UserTransformer())->getArray());
+            return response()->json(app('fractal')->item($user, new UserTransformer())->getArray());
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-            return response()->json(['error' => ['message' => "No user exists for id $user_id"]], 400);
+            return response()->json(['error' => ['message' => "No user exists for id $userId"]], 400);
         }
     }
 
@@ -152,38 +161,38 @@ class RetailerController extends Controller
      * Add a provider to a retailer.
      *
      * @param \Illuminate\Http\Request $request
-     * @param int                      $retailer_user_id
-     * @param int                      $provider_user_id
+     * @param int                      $retailerUserId
+     * @param int                      $providerUserId
      *
      * @return \Illuminate\Http\Response
      */
-    public function addProvider(Request $request, $retailer_user_id, $provider_user_id)
+    public function addProvider(Request $request, $retailerUserId, $providerUserId)
     {
-        $auth_user = $request->user();
+        $authUser = $request->user();
 
-        if (!$auth_user->isAdmin()
-            && (!$auth_user->isRetailer() || ($auth_user->isRetailer() && $auth_user->id != $retailer_user_id))) {
+        if (!$authUser->isAdmin()
+            && (!$authUser->isRetailer() || ($authUser->isRetailer() && $authUser->id != $retailerUserId))) {
             return response()->json(['error' => 'You are not allowed to perform this action'], 401);
         }
 
         try {
-            $retailer_user = User::findOrFail($retailer_user_id);
-            $provider_user = User::findOrFail($provider_user_id);
+            $retailerUser = User::findOrFail($retailerUserId);
+            $providerUser = User::findOrFail($providerUserId);
 
-            if (!$retailer_user->isRetailer()) {
+            if (!$retailerUser->isRetailer()) {
                 return response()->json(['error' => ['message' => 'Incorrect Retailer value']], 400);
             }
 
-            if (!$provider_user->isProvider()) {
+            if (!$providerUser->isProvider()) {
                 return response()->json(['error' => ['message' => 'Incorrect Provider value']], 400);
             }
 
-            $retailer = $retailer_user->userable;
-            $provider = $provider_user->userable;
+            $retailer = $retailerUser->userable;
+            $provider = $providerUser->userable;
 
             $retailer->providers()->syncWithoutDetaching([$provider->id]);
 
-            return response()->json(app('fractal')->item($new_user, new UserTransformer())->getArray());
+            return response()->json(app('fractal')->item($retailerUser, new UserTransformer())->getArray());
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             return response()->json(['error' => ['message' => 'No users for those id']], 400);
         }
@@ -193,37 +202,37 @@ class RetailerController extends Controller
      * Remove a provider.
      *
      * @param \Illuminate\Http\Request $request
-     * @param int                      $retailer_user_id
-     * @param int                      $provider_user_id
+     * @param int                      $retailerUserId
+     * @param int                      $providerUserId
      *
      * @return \Illuminate\Http\Response
      */
-    public function removeProvider(Request $request, $retailer_user_id, $provider_user_id)
+    public function removeProvider(Request $request, $retailerUserId, $providerUserId)
     {
-        $auth_user = $request->user();
+        $authUser = $request->user();
 
-        if (!$auth_user->isAdmin()) {
+        if (!$authUser->isAdmin()) {
             return response()->json(['error' => 'You are not allowed to perform this action'], 401);
         }
 
         try {
-            $retailer_user = User::findOrFail($retailer_user_id);
-            $provider_user = User::findOrFail($provider_user_id);
+            $retailerUser = User::findOrFail($retailerUserId);
+            $providerUser = User::findOrFail($providerUserId);
 
-            if (!$retailer_user->isRetailer()) {
+            if (!$retailerUser->isRetailer()) {
                 return response()->json(['error' => ['message' => 'Incorrect Retailer value']], 400);
             }
 
-            if (!$provider_user->isProvider()) {
+            if (!$providerUser->isProvider()) {
                 return response()->json(['error' => ['message' => 'Incorrect Provider value']], 400);
             }
 
-            $retailer = $retailer_user->userable;
-            $provider = $provider_user->userable;
+            $retailer = $retailerUser->userable;
+            $provider = $providerUser->userable;
 
             $retailer->providers()->detach([$provider->id]);
 
-            return response()->json(app('fractal')->item($new_user, new UserTransformer())->getArray());
+            return response()->json(app('fractal')->item($retailerUser, new UserTransformer())->getArray());
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             return response()->json(['error' => ['message' => 'No users for those id']], 400);
         }

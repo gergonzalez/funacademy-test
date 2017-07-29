@@ -203,7 +203,7 @@ class JwtGuard implements Guard
      *
      * @return string
      */
-    public function generateToken($user_id)
+    public function generateToken($userId)
     {
         $header = [
           'typ' => 'JWT',
@@ -214,16 +214,16 @@ class JwtGuard implements Guard
           'iss' => 'FunAcademyTest',
           'iat' => time(),
           'exp' => time() + config('jwt.ttl') * 60,
-          'sub' => $user_id,
+          'sub' => $userId,
         ];
 
-        $base64_header = base64_encode(json_encode($header, JSON_UNESCAPED_SLASHES));
-        $base64_payload = base64_encode(json_encode($payload, JSON_UNESCAPED_SLASHES));
+        $base64Header = base64_encode(json_encode($header, JSON_UNESCAPED_SLASHES));
+        $base64Payload = base64_encode(json_encode($payload, JSON_UNESCAPED_SLASHES));
 
-        $header_payload = $base64_header.'.'.$base64_payload;
-        $base64_signature = base64_encode(hash_hmac('sha256', $header_payload, config('jwt.secret'), true));
+        $headerPayload = $base64Header.'.'.$base64Payload;
+        $base64Signature = base64_encode(hash_hmac('sha256', $headerPayload, config('jwt.secret'), true));
 
-        $token = $header_payload.'.'.$base64_signature;
+        $token = $headerPayload.'.'.$base64Signature;
 
         return $token;
     }
@@ -258,10 +258,10 @@ class JwtGuard implements Guard
         $parts = explode('.', $token);
 
         if (count($parts) === 3) {
-            $header_payload = $parts[0].'.'.$parts[1];
+            $headerPayload = $parts[0].'.'.$parts[1];
             $signature = $parts[2];
 
-            $inputSignature = hash_hmac('sha256', $header_payload, config('jwt.secret'), true);
+            $inputSignature = hash_hmac('sha256', $headerPayload, config('jwt.secret'), true);
             $knownSignature = base64_decode($signature);
 
             return hash_equals($knownSignature, $inputSignature);

@@ -44,18 +44,18 @@ class UserController extends Controller
      * Display the specified user.
      *
      * @param \Illuminate\Http\Request $request
-     * @param int                      $user_id
+     * @param int                      $userId
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function show(Request $request, $user_id)
+    public function show(Request $request, $userId)
     {
         if (!$request->user()->isAdmin()) {
             return response()->json(['error' => 'You are not allowed to perform this action'], 401);
         }
 
         try {
-            $user = User::findOrFail($user_id);
+            $user = User::findOrFail($userId);
 
             return response()->json(app('fractal')->item($user, new UserTransformer())->getArray());
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
@@ -67,18 +67,18 @@ class UserController extends Controller
      * Update the activate value in db.
      *
      * @param \Illuminate\Http\Request $request
-     * @param int                      $user_id
+     * @param int                      $userId
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function activate(Request $request, $user_id)
+    public function activate(Request $request, $userId)
     {
         if (!$request->user()->isAdmin()) {
             return response()->json(['error' => 'You are not allowed to perform this action'], 401);
         }
 
         try {
-            $user = User::findOrFail($user_id);
+            $user = User::findOrFail($userId);
             $user->active = 1;
             $user->save();
 

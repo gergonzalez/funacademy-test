@@ -1,6 +1,6 @@
 <?php
 /**
- * Manage requests to 'admins*'.
+ * Transform Retailer Data.
  *
  * @author     German Gonzalez Rodriguez <ger@gergonzalez.com>
  * @copyright  German Gonzalez Rodriguez
@@ -49,12 +49,12 @@ class RetailerTransformer extends TransformerAbstract
     }
 
     /**
-     * Include Provider.
+     * Include Providers.
      *
-     * @return League\Fractal\ItemResource
+     * @return League\Fractal\CollectionResource
      */
     public function includeProviders(Retailer $retailer)
     {
-        return $this->collection($retailer->providers()->get(), new ProviderTransformer());
+        return $this->collection($retailer->providers()->get(), new ExtendedProviderTransformer());
     }
 }

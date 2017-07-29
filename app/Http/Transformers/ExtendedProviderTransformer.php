@@ -12,7 +12,7 @@ namespace App\Http\Transformers;
 use League\Fractal\TransformerAbstract;
 use App\Provider;
 
-class ProviderTransformer extends TransformerAbstract
+class ExtendedProviderTransformer extends TransformerAbstract
 {
     /**
      * List of resources possible to include.
@@ -37,12 +37,22 @@ class ProviderTransformer extends TransformerAbstract
      */
     public function transform(Provider $provider)
     {
+        $user = $provider->user;
+
         $data = [
-            'companyname' => $provider->company_name,
-            'phone' => $provider->phone,
-            'IBAN' => $provider->iban,
-            'companyDescription' => $provider->company_description,
-            'discount' => $provider->discount,
+            'id' => $user->id,
+            'email' => $user->email,
+            'activated' => $user->active,
+            'createdAt' => $user->created_at->toFormattedDateString(),
+            'type' => $user->getType(),
+            'accepted' => $provider->pivot->accepted,
+            'data' => [
+                'companyname' => $provider->company_name,
+                'phone' => $provider->phone,
+                'IBAN' => $provider->iban,
+                'companyDescription' => $provider->company_description,
+                'discount' => $provider->discount,
+            ]
         ];
 
         return $data;
