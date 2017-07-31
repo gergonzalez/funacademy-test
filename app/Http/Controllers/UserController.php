@@ -31,8 +31,6 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-        // return app('fractal')->collection(User::all(), new UserTransformer())->getArray();
-
         if (!$request->user()->isAdmin()) {
             return response()->json(['error' => 'You are not allowed to perform this action'], 401);
         }

@@ -12,7 +12,7 @@
 */
 
 $app->get('/', function () use ($app) {
-    return response()->json(['data' => ['app'=>'Fun Academy Backend Developer Test','version'=>$app->version()]]);
+    return response()->json(['data' => ['app' => 'Fun Academy Backend Developer Test', 'version' => $app->version()]]);
 });
 
 $app->post('login', 'AuthController@login');
@@ -38,6 +38,9 @@ $app->group(['middleware' => 'auth'], function () use ($app) {
     $app->post('retailers/{retailer_user_id}/add-provider/{provider_user_id}', 'RetailerController@addProvider');
     $app->delete('retailers/{retailer_user_id}/remove-provider/{provider_user_id}', 'RetailerController@removeProvider');
 
+    $app->get('products', 'ProductController@index');
+
+    $app->get('orders', 'OrderController@index');
     $app->post('orders', 'OrderController@store');
     $app->patch('orders/{order_id}', 'OrderController@update');
     $app->delete('orders/{order_id}', 'OrderController@destroy');

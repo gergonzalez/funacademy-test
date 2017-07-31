@@ -25,6 +25,22 @@ class OrderController extends Controller
     }
 
     /**
+     * Display the list of all the orders stored.
+     *
+     * @param \Illuminate\Http\Request $request
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function index(Request $request)
+    {
+        if (!$request->user()->isAdmin()) {
+            return response()->json(['error' => 'You are not allowed to perform this action'], 401);
+        }
+
+        return response()->json(app('fractal')->collection(Order::all(), new OrderTransformer())->getArray());
+    }
+
+    /**
      * Store a newly created Order in db.
      *
      * @param \Illuminate\Http\Request $request
@@ -113,7 +129,7 @@ class OrderController extends Controller
 
         try {
             $this->validate($request, [
-              'status' => 'required',
+              'status' => 'required|in:pending,proccessing,complete,cancelled',
               'observations' => 'required_if:status,cancelled',
             ]);
         } catch (\Illuminate\Validation\ValidationException $e) {
@@ -132,7 +148,7 @@ class OrderController extends Controller
                 $email = $order->user->email;
 
                 app('mailer')->raw($text, function ($message) use ($subject, $email) {
-                    $message->from('no-reply@gergonzalez.com')->to('ger@gergonzalez.com')->subject($subject);
+                    $message->from('no-reply@gergonzalez.com')->to($email)->subject($subject);
                 });
             }
 
