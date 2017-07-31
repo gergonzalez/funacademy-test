@@ -60,15 +60,25 @@ class Retailer extends Model
     }
 
     /**
+     * Get all the providers associated with the retailer
+     * with the accepted pivot.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\belongsToMany
+     */
+    public function acceptedProviders()
+    {
+        return $this->belongsToMany(Provider::class)->withPivot('accepted')->where('accepted', 1);
+    }
+
+    /**
      * Caculate the retailer order total amount.
      *
      * @return float
      */
     public function orderTotalAmount($price, $quantity, $todayQuantity)
     {
-
         $amount = 0;
-        $discounts = $this->providers()->orderBy('discount', 'desc')->pluck('discount');
+        $discounts = $this->acceptedProviders()->orderBy('discount', 'desc')->pluck('discount');
 
         for ($n = $todayQuantity; $n < ($todayQuantity + $quantity); ++$n) {
             $discount = $discounts[  floor($n / 5) ];

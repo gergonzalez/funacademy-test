@@ -172,15 +172,15 @@ class ProviderController extends Controller
             $retailer = $retailerUser->userable;
             $provider = $providerUser->userable;
 
-            if( !$provider->retailers()->where('retailer_id',$retailer->id)->count() ){
+            if (!$provider->retailers()->where('retailer_id', $retailer->id)->count()) {
                 return response()->json(['error' => ['message' => 'No relation between the provider and the retailer']], 400);
             }
-            
+
             $provider->retailers()->updateExistingPivot($retailer->id, ['accepted' => true]);
 
             return response()->json(app('fractal')->item($retailer->user, new UserTransformer())->getArray());
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-            return response()->json(['error' => ['message' => "No users with id $userId"]], 400);
+            return response()->json(['error' => ['message' => 'No users for those id']], 400);
         }
     }
 

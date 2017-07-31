@@ -57,14 +57,14 @@ class OrderController extends Controller
 
         try {
             $this->validate($request, [
-              'product_id' => 'required|exists:products,id',
+              'product' => 'required|exists:products,id',
               'quantity' => 'required|integer',
             ]);
         } catch (\Illuminate\Validation\ValidationException $e) {
             return response()->json(['error' => ['message' => $e->getMessage(), 'data' => $e->getResponse()->original]], 422);
         }
 
-        $product = Product::find($request->product_id);
+        $product = Product::find($request->product);
         $quantity = $request->quantity;
         $amount = 0;
 
@@ -85,7 +85,7 @@ class OrderController extends Controller
             $amount = ($quantity * $product->price) * (1 - ($provider->discount / 100));
         } elseif ($user->isRetailer()) {
             $retailer = $user->userable;
-            $nProviders = $retailer->providers()->count();
+            $nProviders = $retailer->acceptedProviders()->count();
             $maxUnits = 5 * $nProviders;
 
             if ($nProviders) {
