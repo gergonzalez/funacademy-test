@@ -11,6 +11,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Contracts\Auth\Factory as Auth;
+use App\Http\Transformers\UserTransformer;
 
 class AuthController extends Controller
 {
@@ -48,7 +49,8 @@ class AuthController extends Controller
         }
 
         if ($token = $this->auth->attempt($request->only('email', 'password'))) {
-            return response()->json(['data' => ['token' => $token]])->header('Authorization', $token);
+            return response()->json(['data' => ['token' => $token, 
+                'user'=> app('fractal')->item($this->auth->user(), new UserTransformer())->getArray()]])->header('Authorization', $token);
         }
 
         return response()->json(['error' => ['message' => 'Incorrect Credentials', 'token' => []]], 400);
@@ -57,7 +59,8 @@ class AuthController extends Controller
     public function refresh()
     {
         if ($token = $this->auth->refreshToken()) {
-            return response()->json(['data' => ['token' => $token]])->header('Authorization', $token);
+            return response()->json(['data' => ['token' => $token,
+                'user'=> app('fractal')->item($this->auth->user(), new UserTransformer())->getArray()]])->header('Authorization', $token);
         } else {
             return response()->json(['error' => ['message' => 'Token Error', 'token' => []]], 400);
         }

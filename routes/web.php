@@ -12,7 +12,7 @@
 */
 
 $app->get('/', function () use ($app) {
-    return response()->json(['data' => $app->version()]);
+    return response()->json(['data' => ['app'=>'Fun Academy Backend Developer Test','version'=>$app->version()]]);
 });
 
 $app->post('login', 'AuthController@login');

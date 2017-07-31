@@ -20,5 +20,5 @@ return [
     | Defaults to 1 min.
     |
     */
-    'ttl' => env('JWT_TTL', 60),
+    'ttl' => env('JWT_TTL', 1),
 ];
