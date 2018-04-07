@@ -1,0 +1,806 @@
+{
+	"variables": [],
+	"info": {
+		"name": "FunAcademy",
+		"_postman_id": "7eb6614b-9179-f627-dab3-ca71089ec625",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Public",
+			"description": "",
+			"item": [
+				{
+					"name": "Register Website User",
+					"request": {
+						"url": "http://funacademy.gergonzalez.com/website-users",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "email",
+									"value": "ger@gergonzalez.com",
+									"description": "",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "12345",
+									"description": "",
+									"type": "text"
+								},
+								{
+									"key": "name",
+									"value": "Ringo Starr",
+									"description": "",
+									"type": "text"
+								},
+								{
+									"key": "mobilePhone",
+									"value": "616060184",
+									"description": "",
+									"type": "text"
+								},
+								{
+									"key": "createdAt",
+									"value": "2017-07-25 19:04:26",
+									"description": "",
+									"type": "text"
+								}
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Register Provider",
+					"request": {
+						"url": "http://funacademy.gergonzalez.com/providers",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "email",
+									"value": "ger1@gergonzalez.com",
+									"description": "",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "12345",
+									"description": "",
+									"type": "text"
+								},
+								{
+									"key": "companyname",
+									"value": "John and Yoko",
+									"description": "",
+									"type": "text"
+								},
+								{
+									"key": "phone",
+									"value": "616060184",
+									"description": "",
+									"type": "text"
+								},
+								{
+									"key": "IBAN",
+									"value": "123456789019284",
+									"description": "",
+									"type": "text"
+								},
+								{
+									"key": "createdAt",
+									"value": "2017-07-29 20:06:10",
+									"description": "",
+									"type": "text"
+								},
+								{
+									"key": "companyDescription",
+									"value": "",
+									"description": "",
+									"type": "text"
+								}
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Register Retailer",
+					"request": {
+						"url": "http://funacademy.gergonzalez.com/retailers",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "email",
+									"value": "ger3@gergonzalez.com",
+									"description": "",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "12345",
+									"description": "",
+									"type": "text"
+								},
+								{
+									"key": "name",
+									"value": "Paul McCartney",
+									"description": "",
+									"type": "text"
+								},
+								{
+									"key": "mobilePhone",
+									"value": "616060184",
+									"description": "",
+									"type": "text"
+								},
+								{
+									"key": "retailerResponsibleName",
+									"value": "The Beatles",
+									"description": "",
+									"type": "text"
+								},
+								{
+									"key": "address",
+									"value": "Strawberry Fields Square",
+									"description": "",
+									"type": "text"
+								},
+								{
+									"key": "IBAN",
+									"value": "123456789019284",
+									"description": "",
+									"type": "text"
+								},
+								{
+									"key": "createdAt",
+									"value": "2017-07-29 20:09:34",
+									"description": "",
+									"type": "text"
+								},
+								{
+									"key": "phone",
+									"value": "123456789",
+									"description": "",
+									"type": "text"
+								},
+								{
+									"key": "provider",
+									"value": "3",
+									"description": "",
+									"type": "text"
+								}
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"request": {
+						"url": "http://funacademy.gergonzalez.com/login",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "email",
+									"value": "admin@gergonzalez.com",
+									"description": "",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "admin",
+									"description": "",
+									"type": "text"
+								}
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Refresh",
+					"request": {
+						"url": "http://funacademy.gergonzalez.com/refresh",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJGdW5BY2FkZW15VGVzdCIsImlhdCI6MTUwMTQ4Nzc1NCwiZXhwIjoxNTAxNDg3ODE0LCJzdWIiOjF9.lSg7DwpWFEDA6qboL/w5L8/e72AzYia1tG10pLUXZ6s=",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": ""
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Auth",
+			"description": "",
+			"item": [
+				{
+					"name": "Show Users",
+					"request": {
+						"url": "http://funacademy.gergonzalez.com/users",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJGdW5BY2FkZW15VGVzdCIsImlhdCI6MTUwMTQ4OTIyNSwiZXhwIjoxNTAxNDg5Mjg1LCJzdWIiOjF9.yixRjuZ4ynXyc+Hk6fP+pc+Jze2q/YIZnZ8k7bp9714=",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Show User",
+					"request": {
+						"url": "http://funacademy.gergonzalez.com/users/1",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJGdW5BY2FkZW15VGVzdCIsImlhdCI6MTUwMTQ4ODQxOCwiZXhwIjoxNTAxNDg4NDc4LCJzdWIiOjF9.oqr/2JTLVaHsYGIO1aOJUFBymJglSPL27LraTBExmJo=",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Update Website User",
+					"request": {
+						"url": "http://funacademy.gergonzalez.com/website-users/2",
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJGdW5BY2FkZW15VGVzdCIsImlhdCI6MTUwMTM0MDkyNSwiZXhwIjoxNTAxMzQ0NTI1LCJzdWIiOjF9.LCJkLlu1BfYOht6EWjQuMii3GxfpzrsHAeMqjA6O4AQ=",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "email",
+									"value": "ger@gergonzalez.com",
+									"description": "",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "password",
+									"value": "12345",
+									"description": "",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "name",
+									"value": "Ringo Starr",
+									"description": "",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "mobilePhone",
+									"value": "616060185",
+									"description": "",
+									"type": "text"
+								},
+								{
+									"key": "createdAt",
+									"value": "2017-07-25 19:04:26",
+									"description": "",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "active",
+									"value": "1",
+									"description": "",
+									"type": "text",
+									"disabled": true
+								}
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Update Provider",
+					"request": {
+						"url": "http://funacademy.gergonzalez.com/providers/3",
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJGdW5BY2FkZW15VGVzdCIsImlhdCI6MTUwMTQ4ODg5OCwiZXhwIjoxNTAxNDg4OTU4LCJzdWIiOjF9.KPXXwhUBWwflXsqKghIS3KcTqSu0HCjPnbCDh9fTK9c=",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "email",
+									"value": "ger1@gergonzalez.com",
+									"description": "",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "password",
+									"value": "12345",
+									"description": "",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "companyname",
+									"value": "Sgt. Pepper's Lonely Hearts Club Band",
+									"description": "",
+									"type": "text"
+								},
+								{
+									"key": "phone",
+									"value": "616060184",
+									"description": "",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "IBAN",
+									"value": "123456789019284",
+									"description": "",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "createdAt",
+									"value": "2017-07-29 20:06:10",
+									"description": "",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "active",
+									"value": "1",
+									"description": "",
+									"type": "text"
+								}
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Update Retailer",
+					"request": {
+						"url": "http://funacademy.gergonzalez.com/retailers/4",
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJGdW5BY2FkZW15VGVzdCIsImlhdCI6MTUwMTQ4OTMwMSwiZXhwIjoxNTAxNDg5MzYxLCJzdWIiOjF9.k8Z+x8xFal6C1traWACArln7shjOznq1tkVfxir72oM=",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "email",
+									"value": "ger3@gergonzalez.com",
+									"description": "",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "12345",
+									"description": "",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "name",
+									"value": "Paul McCartney and Wings",
+									"description": "",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "mobilePhone",
+									"value": "616060184",
+									"description": "",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "retailerResponsibleName",
+									"value": "The Beatles",
+									"description": "",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "address",
+									"value": "Strawberry Fields Square",
+									"description": "",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "IBAN",
+									"value": "123456789019285",
+									"description": "",
+									"type": "text"
+								},
+								{
+									"key": "createdAt",
+									"value": "2017-07-29 20:09:34",
+									"description": "",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "phone",
+									"value": "123456789",
+									"description": "",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "active",
+									"value": "1",
+									"description": "",
+									"type": "text",
+									"disabled": true
+								}
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Activate User",
+					"request": {
+						"url": "http://funacademy.gergonzalez.com/users/activate/2",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJGdW5BY2FkZW15VGVzdCIsImlhdCI6MTUwMTM0MDkyNSwiZXhwIjoxNTAxMzQ0NTI1LCJzdWIiOjF9.LCJkLlu1BfYOht6EWjQuMii3GxfpzrsHAeMqjA6O4AQ=",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Set Discount",
+					"request": {
+						"url": "http://funacademy.gergonzalez.com/providers/3/discount",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJGdW5BY2FkZW15VGVzdCIsImlhdCI6MTUwMTM0MDkyNSwiZXhwIjoxNTAxMzQ0NTI1LCJzdWIiOjF9.LCJkLlu1BfYOht6EWjQuMii3GxfpzrsHAeMqjA6O4AQ=",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "discount",
+									"value": "25",
+									"description": "",
+									"type": "text"
+								}
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Attach Provider",
+					"request": {
+						"url": "http://funacademy.gergonzalez.com/retailers/4/add-provider/5",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJGdW5BY2FkZW15VGVzdCIsImlhdCI6MTUwMTM0NDQwMiwiZXhwIjoxNTAxMzQ4MDAyLCJzdWIiOjZ9.YRK/ce7EbyWvhZqJQ0WlqbQVBlINNkMU26g2pJc6sG4=",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Accept Retailer",
+					"request": {
+						"url": "http://funacademy.gergonzalez.com/providers/3/accept-retailer/4",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJGdW5BY2FkZW15VGVzdCIsImlhdCI6MTUwMTQ5MjU5MywiZXhwIjoxNTAxNDkyNjUzLCJzdWIiOjF9.G4tYARq55r5Ky9b0DAyEm3YC0Fj101Km//QigSD2OQk=",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Show Products",
+					"request": {
+						"url": "http://funacademy.gergonzalez.com/products",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJGdW5BY2FkZW15VGVzdCIsImlhdCI6MTUwMTM0NzgxNCwiZXhwIjoxNTAxMzUxNDE0LCJzdWIiOjZ9.M3oTLeSnjbfGzQNrQEV81wio7+RcyuQfHzDqScf6wac=",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "product",
+									"value": "1",
+									"description": "",
+									"type": "text"
+								},
+								{
+									"key": "quantity",
+									"value": "4",
+									"description": "",
+									"type": "text"
+								}
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Show Orders",
+					"request": {
+						"url": "http://funacademy.gergonzalez.com/orders",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJGdW5BY2FkZW15VGVzdCIsImlhdCI6MTUwMTQ5MTEyMiwiZXhwIjoxNTAxNDkxMTgyLCJzdWIiOjF9.6Zzlq9Yz/sKTDg9LYB1887XEAYSDqc+7vah8TCsde+I=",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "product",
+									"value": "1",
+									"description": "",
+									"type": "text"
+								},
+								{
+									"key": "quantity",
+									"value": "4",
+									"description": "",
+									"type": "text"
+								}
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Register Order",
+					"request": {
+						"url": "http://funacademy.gergonzalez.com/orders",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJGdW5BY2FkZW15VGVzdCIsImlhdCI6MTUwMTQ5MTA2NCwiZXhwIjoxNTAxNDkxMTI0LCJzdWIiOjJ9.09n0awWQr5KEeu5ztI9NUax1YrGsQPKb+C3KtMK+xCQ=",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "product",
+									"value": "1",
+									"description": "",
+									"type": "text"
+								},
+								{
+									"key": "quantity",
+									"value": "100",
+									"description": "",
+									"type": "text"
+								}
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Orders Update",
+					"request": {
+						"url": "http://funacademy.gergonzalez.com/orders/1",
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJGdW5BY2FkZW15VGVzdCIsImlhdCI6MTUwMTQ5MTMxMSwiZXhwIjoxNTAxNDkxMzcxLCJzdWIiOjF9.nqpXOec4loydvmmQ85pKdYtgYLjMfgUk47tzx+F/XOI=",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "status",
+									"value": "cancelled",
+									"description": "",
+									"type": "text"
+								},
+								{
+									"key": "observations",
+									"value": "Yeah",
+									"description": "",
+									"type": "text"
+								}
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Order",
+					"request": {
+						"url": "http://funacademy.gergonzalez.com/orders/7",
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJGdW5BY2FkZW15VGVzdCIsImlhdCI6MTUwMTM0NDkxNSwiZXhwIjoxNTAxMzQ4NTE1LCJzdWIiOjF9.cvBgIMESJ7HxwYIHEuZz34GPEHFoRNdf+ShfXypEtXs=",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"description": ""
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

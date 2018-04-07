@@ -1,21 +1,56 @@
-# Lumen PHP Framework
+# Fun Academy Backend Developer Test
 
-[![Build Status](https://travis-ci.org/laravel/lumen-framework.svg)](https://travis-ci.org/laravel/lumen-framework)
-[![Total Downloads](https://poser.pugx.org/laravel/lumen-framework/d/total.svg)](https://packagist.org/packages/laravel/lumen-framework)
-[![Latest Stable Version](https://poser.pugx.org/laravel/lumen-framework/v/stable.svg)](https://packagist.org/packages/laravel/lumen-framework)
-[![Latest Unstable Version](https://poser.pugx.org/laravel/lumen-framework/v/unstable.svg)](https://packagist.org/packages/laravel/lumen-framework)
-[![License](https://poser.pugx.org/laravel/lumen-framework/license.svg)](https://packagist.org/packages/laravel/lumen-framework)
 
-Laravel Lumen is a stunningly fast PHP micro-framework for building web applications with expressive, elegant syntax. We believe development must be an enjoyable, creative experience to be truly fulfilling. Lumen attempts to take the pain out of development by easing common tasks used in the majority of web projects, such as routing, database abstraction, queueing, and caching.
+## Requirements
 
-## Official Documentation
+The main objetive of the test was to design an API for a digital shop. This digital shop consisted of two different parts, one part related to the shop management and another part related to the customer interaction with the shop.
 
-Documentation for the framework can be found on the [Lumen website](http://lumen.laravel.com/docs).
+[Full description here](https://www.google.com)
 
-## Security Vulnerabilities
+## Getting Started
 
-If you discover a security vulnerability within Lumen, please send an e-mail to Taylor Otwell at taylor@laravel.com. All security vulnerabilities will be promptly addressed.
+### Prerequisites
+
+* PHP >= 5.6.4
+* OpenSSL PHP Extension
+* PDO PHP Extension
+* Mbstring PHP Extension
+* Composer
+* Mysql
+
+### Installing
+
+For installing the app. In a terminal window:
+
+1. Execute **composer install** in the provided source root directory to install
+the dependencies.
+
+```
+composer install
+```
+
+2. Create a new database in Mysql.
+3. Rename .env.example file to .env and update the database variables.
+4. Migrate the database. Execute **php artisan migrate** in the root directory.
+
+```
+php artisan migrate
+```
+
+5. Seed the database using **php artisan db:seed** command.
+
+```
+php artisan db:seed
+```
+
+## How to test
+
+A postman export file with all the required api requests was provided to facilitate the testing using this chrome extension. [here](https://www.google.com)
+
+## API
+
+The full API documentation can be found [here](https://www.google.com)
 
 ## License
 
-The Lumen framework is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT)
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
