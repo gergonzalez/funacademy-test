@@ -5,7 +5,7 @@
 
 The main objetive of the test was to design an API for a digital shop. This digital shop consisted of two different parts, one part related to the shop management and another part related to the customer interaction with the shop.
 
-[Full description here](https://www.google.com)
+[Full description here](docs/backend-test.pdf)
 
 ## Getting Started
 
@@ -45,11 +45,11 @@ php artisan db:seed
 
 ## How to test
 
-A postman export file with all the required api requests was provided to facilitate the testing using this chrome extension. [here](https://www.google.com)
+A postman export file with all the required api requests was provided to facilitate the testing using this chrome extension. [here](docs/FunAcademy.postman_collection)
 
 ## API
 
-The full API documentation can be found [here](https://www.google.com)
+The full API documentation can be found [here](docs/TDD.pdf)
 
 ## License
 
